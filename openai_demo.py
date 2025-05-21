@@ -20,8 +20,9 @@ client = OpenAI(
 )
 
 print("Esu asistentas, galintis atsakyti į Jūsų klausimus")
-print("Norėdamas išeiti rašyk 'exit' \n")
-print("Atsakysiu į Jūsu klausimus lietuvių kalba\n")
+print("Atsakysiu į Jūsu klausimus lietuvių kalba")
+print("Norėdamas išeiti rašykyte 'exit' \n")
+
 print("Užduokite savo klausimą: ")
 
 

@@ -20,7 +20,7 @@ client = OpenAI(
 )
 
 print("Esu asistentas, galintis atsakyti į Jūsų klausimus\n")
- print("AI Bot (rašyk 'exit' norėdamas išeiti)\n")
+print("AI Bot (rašyk 'exit' norėdamas išeiti)\n")
 
 while True:
     user_input = input("Užduokite savo klausimą: ")

@@ -1,0 +1,73 @@
+import os
+import tiktoken
+import sys
+
+from openai import OpenAI
+from dotenv import load_dotenv
+
+
+load_dotenv()  # take environment variables
+
+# from .env file
+# Load environment variables from .env file
+
+token = os.getenv("SECRET")  # Replace with your actual token
+endpoint = "https://models.github.ai/inference"
+model = "openai/gpt-4.1-nano"
+
+# initialize the OpenAI client
+# Note: The OpenAI client is initialized with the base URL and API key.
+client = OpenAI(
+    base_url=endpoint,
+    api_key=token,
+)
+
+print("Esu vertėjas iš anglų kalbos į lietuvių\n")
+
+# Token counter
+def count_tokens(text, model="openai/gpt-4.1-nano"):
+    encoding = tiktoken.encoding_for_model(model)
+    return len(encoding.encode(text))
+
+# Read input.txt
+def read_input_file():
+    try:
+        with open("input.txt", "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        print("❌ input.txt not found.")
+        sys.exit(1)                                                                                                                                                                                                                                              
+
+# Write output to lithuanian.txt
+def write_output_file(content):
+    with open("lithuanian.txt", "w", encoding="utf-8") as f:
+        f.write(content)
+    print("📄 Translation saved to lithuanian.txt")
+
+# Translate function
+def translate_to_lithuanian(text):
+    messages = [
+        {"role": "system", "content": "You are a translator. Translate everything into Lithuanian."},
+        {"role": "user", "content": text}
+    ]
+
+    response = client.chat.completions.create(
+        model="openai/gpt-4.1-nano",
+        messages=messages,
+        temperature=0.3
+    )
+    return response.choices[0].message.content
+
+text = read_input_file()
+#token_count = count_tokens(text)
+
+token_count = 10
+
+if token_count > 200:
+    print("⚠️ The text is too long ({} tokens). Max allowed is 200.".format(token_count))
+    sys.exit(0)
+
+translation = translate_to_lithuanian(text)
+print("✅ Translated Text:\n")
+print(translation)
+write_output_file(translation)

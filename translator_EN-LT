@@ -25,7 +25,7 @@ client = OpenAI(
 print("Esu vertėjas iš anglų kalbos į lietuvių\n")
 
 # Token counter
-def count_tokens(text, model="openai/gpt-4.1-nano"):
+def count_tokens(text, model="gpt-4"):
     encoding = tiktoken.encoding_for_model(model)
     return len(encoding.encode(text))
 
@@ -52,22 +52,22 @@ def translate_to_lithuanian(text):
     ]
 
     response = client.chat.completions.create(
-        model="openai/gpt-4.1-nano",
+        model=model,
         messages=messages,
         temperature=0.3
     )
     return response.choices[0].message.content
 
 text = read_input_file()
-#token_count = count_tokens(text)
-
-token_count = 10
+token_count = count_tokens(text)
+print("✅ Input text token count: ", token_count, "\n")
 
 if token_count > 200:
     print("⚠️ The text is too long ({} tokens). Max allowed is 200.".format(token_count))
     sys.exit(0)
 
 translation = translate_to_lithuanian(text)
-print("✅ Translated Text:\n")
-print(translation)
+print("✅ Translated Text: \n", translation, "\n")
+
+# Write the translation to lithuanian.txt
 write_output_file(translation)

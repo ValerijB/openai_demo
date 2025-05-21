@@ -19,30 +19,37 @@ client = OpenAI(
     api_key=token,
 )
 
-print("Esu asistentas, galintis atsakyti į Jūsų klausimus\n")
-print("AI Bot (rašyk 'exit' norėdamas išeiti)\n")
+print("Esu asistentas, galintis atsakyti į Jūsų klausimus")
+print("Norėdamas išeiti rašyk 'exit' \n")
+print("Atsakysiu į Jūsu klausimus lietuvių kalba\n")
+print("Užduokite savo klausimą: ")
+
+
+messages = [
+    {
+        "role": "system",
+        "content": "You are a helpful assistant. You always answer in Lithuanian. Please remember our conversation.",
+    }
+]
 
 while True:
-    user_input = input("Užduokite savo klausimą: ")
+    user_input = input( )
 
     if user_input == 'exit':
         print("Ačiū, iki greito pasimatymo!")
         exit()
 
+    # Add user message to history
+    messages.append({"role": "user", "content": user_input})
+
     response = client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant. You always answer in Lithuanian",
-            },
-            {
-                "role": "user",
-                "content": f'{user_input}',
-            }
-        ],
+        messages=messages,
         temperature=1.0,
         top_p=1.0,
         model=model
     )
 
-    print(response.choices[0].message.content)
+    reply = response.choices[0].message.content
+    # Add assistant reply to history
+    messages.append({"role": "assistant", "content": reply})
+    print(reply)
